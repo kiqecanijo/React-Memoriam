@@ -1,12 +1,30 @@
 import React, { Component } from 'react'
 import Card from './card'
 import FacebookLogin from 'react-facebook-login'
+import ReactCardFlip from 'react-card-flip'
 
 const divStyles = {
   width: '800px',
   padding: '0px',
   margin: 'auto',
   display: 'block'
+}
+
+const retryButton = {
+  width: '200px',
+  color: 'white',
+  backgroundColor: 'orange',
+  borderRadius: '10px',
+  fontSize: '20px',
+  padding: '15px'
+}
+const resetButton = {
+  padding: '15px',
+  color: 'white',
+  backgroundColor: 'red',
+  borderRadius: '10px',
+  border: '0px',
+  fontSize: '20px'
 }
 
 class App extends Component {
@@ -53,20 +71,11 @@ class App extends Component {
   }
 
   componentWillMount() {
+    //TODO create connection for initial info
+
     let temporal =
       '{"user_id":"194905014179132","cards":null,"score":"10","full_name":"Test testiano testianguez","mistakes":"0","multiplier":"1","time":"0","tryNumber":"0"}'
     temporal = JSON.parse(temporal)
-
-    /*var data = 'action=login&user_id=194905014179132&fullname=Test%20testiano%20testianguez&undefined='
-    var xhr = new XMLHttpRequest()
-    xhr.withCredentials = true
-    xhr.addEventListener('readystatechange', function() {
-      //const response = JSON.parse(temporal)
-    })
-    xhr.open('POST', 'https://centralmedia.com.mx/facebook/cliente-nutribaby/memorama/entrypoint.php')
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
-    xhr.setRequestHeader('cache-control', 'no-cache')
-    xhr.send(data)*/
 
     this.setState({
       ...this.state,
@@ -99,14 +108,14 @@ class App extends Component {
         : currentCards
 
     const solved = (sameCardsInRound === 2 && this.state.solved + 1) || this.state.solved
+
     const multiplier =
       (sameCardsInRound === 2 && this.state.multiplier + 1) || (!this.state.flipped && this.state.multiplier) || 1
-    const mistakes = (this.state.flipped && sameCardsInRound !== 2 && this.state.mistakes + 1) || this.state.mistakes
 
-    let totalScore = this.state.flipped
+    const mistakes = (this.state.flipped && sameCardsInRound !== 2 && this.state.mistakes + 1) || this.state.mistakes
+    const totalScore = this.state.flipped
       ? this.state.totalScore + (sameCardsInRound === 2 ? 100 : 0) * this.state.multiplier
       : this.state.totalScore
-
     let score = totalScore / (mistakes || 1)
     score = score.toFixed(2)
 
@@ -121,10 +130,17 @@ class App extends Component {
       mistakes,
       multiplier
     })
-  }
-
-  componentDidUpdate() {
-    this.state.cards.every(card => card.solved) && console.log(this.state)
+    //are player won ?
+    currentCards.every(card => card.solved) &&
+      setTimeout(el => {
+        this.setState({
+          ...this.state,
+          won: true,
+          ready: false
+        })
+      }, 3000)
+    //notify
+    //you win
   }
 
   startGame() {
@@ -138,6 +154,8 @@ class App extends Component {
     let cards = this.state.cards.map(card => ({ ...card, revealed: false, solved: false }))
     this.setState({
       ...this.state,
+      ready: true,
+      won: false,
       score: 0,
       totalScore: 0,
       solved: 0,
@@ -152,48 +170,73 @@ class App extends Component {
   render() {
     return (
       <div style={divStyles}>
-        <FacebookLogin
-          appId="285081055684698"
-          autoLoad={true}
-          fields="name,email,picture"
-          callback={this.responseFacebook.bind(this)}
-          cssClass="my-facebook-button-class"
-          icon="fa-facebook"
-        />
-        <p>{this.state.name}</p>
-        <p>{this.state.id}</p>
-        {false && <button onClick={this.logState.bind(this)}>Log</button>}
-        <div>
-          <table>
-            <tbody>
-              <tr>
-                <td>
-                  {!this.state.ready ? 'Max score' : 'score'}: {this.state.score}
-                </td>
-                <br />
-                {this.state.mistakes > 1 && <td>mistakes: {this.state.mistakes}</td>}
-                <br />
-                {this.state.multiplier > 1 && <td>multiplier: {this.state.multiplier}</td>}
-              </tr>
-            </tbody>
-          </table>
-          {this.state.ready &&
-            this.state.mistakes > 1 && <button onClick={this.resetGame.bind(this)}>Reset Game</button>}
+        <ReactCardFlip isFlipped={!this.state.ready}>
+          <div key="back">
+            {!this.state.id && (
+              <FacebookLogin
+                appId="1999682333432755"
+                autoLoad={true}
+                fields="name,email,picture"
+                callback={this.responseFacebook.bind(this)}
+                cssClass="my-facebook-button-class"
+                icon="fa-facebook"
+              />
+            )}
+            <p>{!this.state.won && this.state.name && `Hola: ${this.state.name} `}</p>
+            <p>{!this.state.won && this.state.id}</p>
+            {true && <button onClick={this.logState.bind(this)}>Log</button>}
+            <div>
+              <table>
+                <tbody>
+                  <tr>
+                    <td>
+                      {this.state.id &&
+                        (!this.state.ready ? `Max score: ${this.state.score}` : `score: ${this.state.score} `)}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              {this.state.id &&
+                !this.state.ready && (
+                  <button
+                    style={retryButton}
+                    onClick={!this.state.won ? this.startGame.bind(this) : this.resetGame.bind(this)}>
+                    {(this.state.score > 0 && 'Retry game') || 'Start Game'}
+                  </button>
+                )}
+            </div>
+          </div>
+          <div key="front">
+            <table>
+              <tbody>
+                <tr>
+                  <td>
+                    {!this.state.ready ? 'Max score' : 'score'}: {this.state.score}
+                  </td>
+                  <br />
+                  {this.state.mistakes > 1 && <td>mistakes: {this.state.mistakes}</td>}
+                  <br />
+                  {this.state.multiplier > 1 && <td>multiplier: {this.state.multiplier}</td>}
+                  <br />
 
-          {!this.state.ready && (
-            <button onClick={this.startGame.bind(this)}>
-              {(this.state.score > 0 && 'Retry game') || 'Start Game'}
-            </button>
-          )}
-        </div>
-        {this.state.id &&
-          this.state.ready &&
-          this.state.cards.map(card => (
-            <Card active={this.state.ready} handleClick={this.handleCardClick.bind(this)} card={card} />
-          ))}
+                  {this.state.ready &&
+                    this.state.mistakes > 1 && (
+                      <button style={resetButton} onClick={this.resetGame.bind(this)}>
+                        Reset Game
+                      </button>
+                    )}
+                </tr>
+              </tbody>
+            </table>
+            {this.state.id &&
+              this.state.ready &&
+              this.state.cards.map(card => (
+                <Card active={this.state.ready} handleClick={this.handleCardClick.bind(this)} card={card} />
+              ))}
+          </div>
+        </ReactCardFlip>
       </div>
     )
   }
 }
-
 export default App
