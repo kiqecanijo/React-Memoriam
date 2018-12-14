@@ -171,10 +171,10 @@ class App extends Component {
     return (
       <div style={divStyles}>
         <ReactCardFlip isFlipped={!this.state.ready}>
-          <div key="back">
+          <div key="back" style={{ textAlign: 'center' }}>
             {!this.state.id && (
               <FacebookLogin
-                appId="YOUR_APP_ID"
+                appId="1999682333432755"
                 autoLoad={true}
                 fields="name,email,picture"
                 callback={this.responseFacebook.bind(this)}
@@ -184,18 +184,10 @@ class App extends Component {
             )}
             <p>{!this.state.won && this.state.name && `Hola: ${this.state.name} `}</p>
             <p>{!this.state.won && this.state.id}</p>
-            {true && <button onClick={this.logState.bind(this)}>Log</button>}
             <div>
-              <table>
-                <tbody>
-                  <tr>
-                    <td>
-                      {this.state.id &&
-                        (!this.state.ready ? `Max score: ${this.state.score}` : `score: ${this.state.score} `)}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              {this.state.id && (!this.state.ready ? `Max score: ${this.state.score}` : `score: ${this.state.score} `)}
+              <br />
+              <br />
               {this.state.id &&
                 !this.state.ready && (
                   <button
@@ -235,6 +227,7 @@ class App extends Component {
               ))}
           </div>
         </ReactCardFlip>
+        {false && <button onClick={this.logState.bind(this)}>Log</button>}
       </div>
     )
   }
