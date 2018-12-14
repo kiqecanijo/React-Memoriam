@@ -174,7 +174,7 @@ class App extends Component {
           <div key="back">
             {!this.state.id && (
               <FacebookLogin
-                appId="1999682333432755"
+                appId="YOUR_APP_ID"
                 autoLoad={true}
                 fields="name,email,picture"
                 callback={this.responseFacebook.bind(this)}
