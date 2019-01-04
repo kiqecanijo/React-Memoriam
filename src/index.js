@@ -4,12 +4,35 @@ import './index.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 import { combineReducers, createStore } from 'redux'
-import { provider } from 'react-redux'
+import { Provider } from 'react-redux'
 import { connect } from 'react-redux'
+import userInfoReducer from ''
+import scoreReducer from ''
 
-ReactDOM.render(<App />, document.getElementById('root'))
+//combinedReducers sound similar to combineReducers :/
+const allreadyCombinedReducers = combineReducers({
+  userInfoReducer,
+  scoreReducer
+})
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
+const store = createStore(allreadyCombinedReducers, {
+  userInfo: {
+    name: 'exampleName',
+    lastName: 'exampleLastName'
+  },
+  score: {
+    currentScore: 0,
+    maxScore: 0
+  }
+})
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+)
+
+//ReactDOM.render(<App />, document.getElementById('root'))
+
 serviceWorker.unregister()
