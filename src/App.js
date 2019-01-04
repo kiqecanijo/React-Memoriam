@@ -232,4 +232,8 @@ class App extends Component {
     )
   }
 }
+
+const mapDispatchToProps = () => {}
+const mapStateToProps = () => {}
+
 export default App

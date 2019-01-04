@@ -5,6 +5,7 @@ import App from './App'
 import * as serviceWorker from './serviceWorker'
 import { combineReducers, createStore } from 'redux'
 import { provider } from 'react-redux'
+import { connect } from 'react-redux'
 
 ReactDOM.render(<App />, document.getElementById('root'))
 
