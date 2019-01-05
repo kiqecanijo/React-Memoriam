@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import Card from './card'
+import { connect } from 'react-redux'
 import FacebookLogin from 'react-facebook-login'
 import ReactCardFlip from 'react-card-flip'
+import { reorderCards } from './actions/cards-actions'
 
 const divStyles = {
   width: '800px',
@@ -39,58 +41,35 @@ class App extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {
+
+    /*this.state = {
       ...props,
-      totalScore: 0,
-      score: 0,
       solved: 0,
       multiplier: 1,
       mistakes: 0,
       flipped: false,
       won: false,
-      ready: false,
-      cards: [
-        { value: 1, revealed: false, solved: false, image: './static/puppy1.jpg' },
-        { value: 1, revealed: false, solved: false, image: './static/puppy1.jpg' },
-        { value: 2, revealed: false, solved: false, image: './static/puppy2.jpg' },
-        { value: 2, revealed: false, solved: false, image: './static/puppy2.jpg' },
-        { value: 3, revealed: false, solved: false, image: './static/puppy3.jpg' },
-        { value: 3, revealed: false, solved: false, image: './static/puppy3.jpg' },
-        { value: 4, revealed: false, solved: false, image: './static/puppy4.jpg' },
-        { value: 4, revealed: false, solved: false, image: './static/puppy4.jpg' },
-        { value: 5, revealed: false, solved: false, image: './static/puppy5.jpg' },
-        { value: 5, revealed: false, solved: false, image: './static/puppy5.jpg' },
-        { value: 6, revealed: false, solved: false, image: './static/puppy6.jpg' },
-        { value: 6, revealed: false, solved: false, image: './static/puppy6.jpg' },
-        { value: 7, revealed: false, solved: false, image: './static/puppy7.jpg' },
-        { value: 7, revealed: false, solved: false, image: './static/puppy7.jpg' },
-        { value: 8, revealed: false, solved: false, image: './static/puppy8.jpg' },
-        { value: 8, revealed: false, solved: false, image: './static/puppy8.jpg' }
-      ]
-    }
+      ready: false
+    }*/
   }
 
-  componentWillMount() {
-    //TODO create connection for initial info
+  onReorderCards() {
+    this.props.onReorderCards(this.props.cards)
+  }
+  componentDidMount() {
+    console.log(this.props.cards)
 
-    let temporal =
-      '{"user_id":"194905014179132","cards":null,"score":"10","full_name":"Test testiano testianguez","mistakes":"0","multiplier":"1","time":"0","tryNumber":"0"}'
-    temporal = JSON.parse(temporal)
-
+    //this.onReorderCards()
+    console.log(this.props.cards)
     this.setState({
       ...this.state,
-      score: temporal.score,
-      cards: this.state.cards.sort(function(a, b) {
+      cards: this.props.cards.sort(function(a, b) {
         return 0.5 - Math.random()
       })
     })
   }
 
-  logState() {
-    console.log(this.state)
-  }
-
-  handleCardClick(handleCard) {
+  /*handleCardClick(handleCard) {
     let currentCards = this.state.cards
     //####### hide all except current flipped ######
     //#(inverted in component at compare moment) ###
@@ -142,7 +121,7 @@ class App extends Component {
     //notify
     //you win
   }
-
+*/
   startGame() {
     this.setState({
       ...this.state,
@@ -151,7 +130,7 @@ class App extends Component {
     })
   }
   resetGame() {
-    let cards = this.state.cards.map(card => ({ ...card, revealed: false, solved: false }))
+    let cards = this.props.cards.map(card => ({ ...card, revealed: false, solved: false }))
     this.setState({
       ...this.state,
       ready: true,
@@ -167,7 +146,7 @@ class App extends Component {
     })
   }
 
-  render() {
+  /*render() {
     return (
       <div style={divStyles}>
         <ReactCardFlip isFlipped={!this.state.ready}>
@@ -222,7 +201,7 @@ class App extends Component {
             </table>
             {this.state.id &&
               this.state.ready &&
-              this.state.cards.map(card => (
+              this.props.cards.map(card => (
                 <Card active={this.state.ready} handleClick={this.handleCardClick.bind(this)} card={card} />
               ))}
           </div>
@@ -231,9 +210,26 @@ class App extends Component {
       </div>
     )
   }
+  */
+
+  render() {
+    return (
+      <ul>
+        {this.props.cards.map(el => (
+          <li>{el.image}</li>
+        ))}
+      </ul>
+    )
+  }
 }
 
-const mapDispatchToProps = () => {}
-const mapStateToProps = () => {}
-
-export default App
+const mapDispatchToProps = {
+  onReorderCards: reorderCards
+}
+const mapStateToProps = ({ userInfo, score, cards }) => {
+  return { userInfo, score, cards }
+}
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App)

@@ -1,6 +1,6 @@
-import { UPDATE_USER } from ''
+import { UPDATE_USER } from '../actions/user-actions.js'
 
-const userInfoReducer = (state = '', { type, payload }) => {
+const userInfo = (state = '', { type, payload }) => {
   switch (type) {
     case UPDATE_USER:
       return payload.userInfo
@@ -9,4 +9,4 @@ const userInfoReducer = (state = '', { type, payload }) => {
   }
 }
 
-export default userInfoReducer
+export default userInfo

@@ -1,6 +1,6 @@
-import { UPDATE_SCORE } from ''
+import { UPDATE_SCORE } from '../actions/score-actions.js'
 
-const scoreReducer = (state = '', { type, payload }) => {
+const score = (state = '', { type, payload }) => {
   switch (type) {
     case UPDATE_SCORE:
       return payload.score
@@ -9,4 +9,4 @@ const scoreReducer = (state = '', { type, payload }) => {
   }
 }
 
-export default scoreReducer
+export default score
