@@ -1,72 +1,120 @@
 import React, { Component } from 'react'
-import Card from './card'
+//import Card from './card'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group' // ES6
+
 import { connect } from 'react-redux'
-import FacebookLogin from 'react-facebook-login'
-import ReactCardFlip from 'react-card-flip'
-import { reorderCards } from './actions/cards-actions'
+//import FacebookLogin from 'react-facebook-login'
+//import ReactCardFlip from 'react-card-flip'
+import { reorderCards, updateCards } from './actions/cards-actions'
+import { renameUser } from './actions/user-actions'
+import Test from './test.js'
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 
-const divStyles = {
-  width: '800px',
-  padding: '0px',
-  margin: 'auto',
-  display: 'block'
-}
+const Home = () => <h2>Home</h2>
+const About = () => <h2>About</h2>
+const Topic = ({ match }) => <h3>Requested Param: {match.params.id}</h3>
+const Topics = ({ match }) => (
+  <div>
+    <h2>Topics</h2>
 
-const retryButton = {
-  width: '200px',
-  color: 'white',
-  backgroundColor: 'orange',
-  borderRadius: '10px',
-  fontSize: '20px',
-  padding: '15px'
-}
-const resetButton = {
-  padding: '15px',
-  color: 'white',
-  backgroundColor: 'red',
-  borderRadius: '10px',
-  border: '0px',
-  fontSize: '20px'
-}
+    <ul>
+      <li>
+        <Link to={`${match.url}/components`}>Components</Link>
+      </li>
+      <li>
+        <Link to={`${match.url}/props-v-state`}>Props v. State</Link>
+      </li>
+    </ul>
+
+    <Route exact path={match.path} render={() => <h3>Please select a topic.</h3>} />
+    <Route path={`${match.path}/:id`} component={Topic} />
+  </div>
+)
+
+const Header = () => (
+  <ul>
+    <li>
+      <Link to="/">Home</Link>
+    </li>
+    <li>
+      <Link to="/about">About</Link>
+    </li>
+    <li>
+      <Link to="/topics">Topics</Link>
+    </li>
+  </ul>
+)
+
+const AppRouter = () => (
+  <Router>
+    <div>
+      <Header />
+
+      <Route exact path="/" component={Home} />
+      <Route path="/about" component={About} />
+      <Route path="/topics" component={Topics} />
+    </div>
+  </Router>
+)
 
 class App extends Component {
-  responseFacebook(response) {
+  constructor(props) {
+    super(props)
+    this.onReorderCards = this.onReorderCards.bind(this)
+    this.onUpdateCards = this.onUpdateCards.bind(this)
+    this.onRenameUser = this.onRenameUser.bind(this)
+
+    this.state = { items: [] }
+    this.handleAdd = this.handleAdd.bind(this)
+  }
+
+  handleAdd() {
+    const newItems = this.state.items.concat('randomString')
+    this.setState({ items: newItems })
+  }
+
+  handleRemove(i) {
+    let newItems = this.state.items.slice()
+    newItems.splice(i, 1)
+    this.setState({ items: newItems })
+  }
+
+  componentDidMount(callback) {
+    setTimeout(() => {
+      this.setState({
+        ...this.state,
+        items: ['hello', 'world', 'click', 'me', 'meno']
+      })
+    }, 500)
+    setTimeout(() => {
+      console.log('GG')
+    }, 500)
+  }
+
+  /*responseFacebook(response) {
     this.setState({
       ...this.state,
       name: response.name,
       id: response.id,
       picture: response.picture
     })
-  }
+  }*/
+  onUpdateCards() {
+    let cards = this.props.cards /*.filter(el => el.value > 0)*/
+      .sort((a, b) => {
+        return 0.5 - Math.random()
+      })
 
-  constructor(props) {
-    super(props)
-
-    /*this.state = {
-      ...props,
-      solved: 0,
-      multiplier: 1,
-      mistakes: 0,
-      flipped: false,
-      won: false,
-      ready: false
-    }*/
+    this.props.onUpdateCards(cards)
   }
 
   onReorderCards() {
-    this.props.onReorderCards(this.props.cards)
+    let cards = this.props.cards.filter(el => el.value > 0)
+    //let cards = this.props.cards
+    this.props.onReorderCards(cards)
   }
-  componentDidMount() {
-    console.log(this.props.cards)
-
-    //this.onReorderCards()
-    console.log(this.props.cards)
-    this.setState({
-      ...this.state,
-      cards: this.props.cards.sort(function(a, b) {
-        return 0.5 - Math.random()
-      })
-    })
+  onRenameUser(event) {
+    this.props.onRenameUser(event.target.value)
   }
 
   /*handleCardClick(handleCard) {
@@ -122,28 +170,34 @@ class App extends Component {
     //you win
   }
 */
-  startGame() {
-    this.setState({
-      ...this.state,
-      score: 0.0,
-      ready: true
-    })
-  }
-  resetGame() {
-    let cards = this.props.cards.map(card => ({ ...card, revealed: false, solved: false }))
-    this.setState({
-      ...this.state,
-      ready: true,
-      won: false,
-      score: 0,
-      totalScore: 0,
-      solved: 0,
-      multiplier: 1,
-      mistakes: 0,
-      cards: cards.sort((a, b) => {
-        return 0.5 - Math.random()
-      })
-    })
+
+  render() {
+    const items = this.state.items.map((item, i) => (
+      <div key={item} onClick={() => this.handleRemove(i)}>
+        {item}
+      </div>
+    ))
+
+    return (
+      <div>
+        <div>
+          <button onClick={this.handleAdd}>Add Item</button>
+          <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={500} transitionLeaveTimeout={300}>
+            {items}
+          </ReactCSSTransitionGroup>
+        </div>
+        <ul>
+          {this.props.cards.map(el => (
+            <li>{el.image}</li>
+          ))}
+        </ul>
+        <p>{this.props.userInfo.name}</p>
+        <button onClick={this.onReorderCards}>Reorder</button>
+
+        <input onChange={this.onRenameUser} placeholder={this.props.userInfo.name} />
+        <Test />
+      </div>
+    )
   }
 
   /*render() {
@@ -211,25 +265,22 @@ class App extends Component {
     )
   }
   */
-
-  render() {
-    return (
-      <ul>
-        {this.props.cards.map(el => (
-          <li>{el.image}</li>
-        ))}
-      </ul>
-    )
-  }
 }
 
 const mapDispatchToProps = {
-  onReorderCards: reorderCards
+  onReorderCards: reorderCards,
+  onRenameUser: renameUser,
+  onUpdateCards: updateCards
 }
 const mapStateToProps = ({ userInfo, score, cards }) => {
   return { userInfo, score, cards }
 }
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(App)
+/*export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AppRouter)*/
