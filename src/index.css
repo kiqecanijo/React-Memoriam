@@ -28,6 +28,13 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+ul li {
+  list-style-type: none;
+}
+ul li a {
+  color: white;
+  text-decoration: none;
+}
 
 .my-facebook-button-class {
   padding: 15px;
