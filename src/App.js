@@ -1,12 +1,10 @@
 import React from 'react'
-//import Card from './card'
 //import FacebookLogin from 'react-facebook-login'
-//import ReactCardFlip from 'react-card-flip'
 
 import Memoriam from './memoriam'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import About from './about'
 
-const About = () => <h2>About</h2>
 const Topic = ({ match }) => <h3>Requested Param: {match.params.id}</h3>
 const Topics = ({ match }) => (
   <div>
@@ -46,7 +44,7 @@ const Header = () => (
 
 const AppRouter = () => (
   <Router>
-    <div>
+    <div style={{ margin: 'auto', width: '85%' }}>
       <Header />
       <Route exact path="/memory" component={Memoriam} />
       <Route path="/about" component={About} />

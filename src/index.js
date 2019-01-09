@@ -16,25 +16,27 @@ const allreadyCombinedReducers = combineReducers({
 const store = createStore(allreadyCombinedReducers, {
   userInfo: {
     name: 'exampleName',
-    lastName: 'exampleLastName'
+    lastName: 'exampleLastName',
+    score: false,
+    debug: true
   },
   cards: [
-    { id: 1, value: 1, revealed: false, solved: false, image: './static/puppy1.jpg' },
-    { id: 2, value: 1, revealed: false, solved: false, image: './static/puppy1.jpg' },
-    { id: 3, value: 2, revealed: false, solved: false, image: './static/puppy2.jpg' },
-    { id: 4, value: 2, revealed: false, solved: false, image: './static/puppy2.jpg' },
-    { id: 5, value: 3, revealed: false, solved: false, image: './static/puppy3.jpg' },
-    { id: 6, value: 3, revealed: false, solved: false, image: './static/puppy3.jpg' },
-    { id: 7, value: 4, revealed: false, solved: false, image: './static/puppy4.jpg' },
-    { id: 8, value: 4, revealed: false, solved: false, image: './static/puppy4.jpg' },
-    { id: 9, value: 5, revealed: false, solved: false, image: './static/puppy5.jpg' },
-    { id: 10, value: 5, revealed: false, solved: false, image: './static/puppy5.jpg' },
-    { id: 11, value: 6, revealed: false, solved: false, image: './static/puppy6.jpg' },
-    { id: 12, value: 6, revealed: false, solved: false, image: './static/puppy6.jpg' },
-    { id: 13, value: 7, revealed: false, solved: false, image: './static/puppy7.jpg' },
-    { id: 14, value: 7, revealed: false, solved: false, image: './static/puppy7.jpg' },
-    { id: 15, value: 8, revealed: false, solved: false, image: './static/puppy8.jpg' },
-    { id: 16, value: 8, revealed: false, solved: false, image: './static/puppy8.jpg' }
+    { flipped: false, solved: false, path: './static/puppy1.jpg' },
+    { flipped: false, solved: false, path: './static/puppy1.jpg' },
+    { flipped: false, solved: false, path: './static/puppy2.jpg' },
+    { flipped: false, solved: false, path: './static/puppy2.jpg' },
+    { flipped: false, solved: false, path: './static/puppy3.jpg' },
+    { flipped: false, solved: false, path: './static/puppy3.jpg' },
+    { flipped: false, solved: false, path: './static/puppy4.jpg' },
+    { flipped: false, solved: false, path: './static/puppy4.jpg' },
+    { flipped: false, solved: false, path: './static/puppy5.jpg' },
+    { flipped: false, solved: false, path: './static/puppy5.jpg' },
+    { flipped: false, solved: false, path: './static/puppy6.jpg' },
+    { flipped: false, solved: false, path: './static/puppy6.jpg' },
+    { flipped: false, solved: false, path: './static/puppy7.jpg' },
+    { flipped: false, solved: false, path: './static/puppy7.jpg' },
+    { flipped: false, solved: false, path: './static/puppy8.jpg' },
+    { flipped: false, solved: false, path: './static/puppy8.jpg' }
   ]
 })
 
