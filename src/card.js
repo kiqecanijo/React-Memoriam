@@ -1,54 +1,28 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { CSSTransition, CSSTransitionGroup } from 'react-transition-group' // ES6
-
+import { Spring } from 'react-spring'
+import { useSpring, animated } from 'react-spring/hooks'
 const divStyle = {
   width: '25%',
-  textAlign: 'center',
+  //textAlign: 'center',
   display: 'inline-flex'
 }
-
 const imgStyle = {
-  width: '98%',
-  height: '98%'
+  width: '98%'
 }
 
-class Card extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      element: 'X'
-    }
-  }
-
-  componentWillMount() {
-    setInterval(() => {
-      this.setState({
-        element: this.state.element == 'X' ? 'Y' : 'X'
-      })
-    }, 1000)
-  }
-
-  render() {
-    const img = this.props.el.flipped ? (
-      <img alt="card" style={imgStyle} src={this.props.el.path} onClick={this.props.handleClick} />
-    ) : (
-      <img alt="card" style={imgStyle} src={'./static/gray.jpg'} onClick={this.props.handleClick} />
-    )
-
-    return (
-      <CSSTransitionGroup
-        style={divStyle}
-        transitionName="example"
-        transitionAppear={true}
-        transitionAppearTimeout={500}
-        transitionEnter={true}
-        transitionLeave={true}
-        classNames="fade">
-        {img}
-      </CSSTransitionGroup>
-    )
-  }
+const Card = ({ handleClick, id, el, userInfo }) => {
+  return (
+    <div style={divStyle}>
+      <Spring from={{ opacity: 0 }} to={{ opacity: 1 }} config={{ easing: t => t, duration: 1000, delay: 50 * id }}>
+        {props => (
+          <div style={{ opacity: props.opacity, width: '100%' }}>
+            <img style={imgStyle} onClick={handleClick} src={el.flipped ? el.path : './static/gray.jpg'} />
+          </div>
+        )}
+      </Spring>
+    </div>
+  )
 }
 
 const mapStateToProps = ({ userInfo, cards }) => {

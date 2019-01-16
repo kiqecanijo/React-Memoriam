@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import { connect } from 'react-redux'
 import { renameUser } from './actions/user-actions'
 import { Link } from 'react-router-dom'
