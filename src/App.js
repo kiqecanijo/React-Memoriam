@@ -44,7 +44,7 @@ const Header = () => (
 
 const AppRouter = () => (
   <Router>
-    <div style={{ margin: 'auto', width: '85%' }}>
+    <div style={{ margin: 'auto', width: '100%' }}>
       <Header />
       <Route exact path="/memory" component={Memoriam} />
       <Route path="/about" component={About} />

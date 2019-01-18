@@ -15,6 +15,7 @@ const allreadyCombinedReducers = combineReducers({
 
 const store = createStore(allreadyCombinedReducers, {
   userInfo: {
+    chat: [],
     name: 'exampleName',
     lastName: 'exampleLastName',
     score: false,
@@ -46,5 +47,4 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 )
-//serviceWorker.register()
 serviceWorker.unregister()

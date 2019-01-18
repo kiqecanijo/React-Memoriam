@@ -4,8 +4,8 @@ const cards = (state = '', { type, payload }) => {
     case UPDATE_CARDS:
       let updated = payload.cards
       //Switch comments to alternate flip on click
-      //updated[payload.index] = { ...updated[payload.index], flipped: !updated[payload.index].flipped }
-      updated[payload.index] = { ...updated[payload.index], flipped: true }
+      updated[payload.index] = { ...updated[payload.index], flipped: !updated[payload.index].flipped }
+      //updated[payload.index] = { ...updated[payload.index], flipped: true }
       return updated
     case FLIP_CARDS:
       let flipped = payload.cards

@@ -1,5 +1,6 @@
 export const UPDATE_USER = 'user:updateUser'
-export const RENAME_USER = 'user:V'
+export const RENAME_USER = 'user:renameUser'
+export const ADD_CHAT = 'user:addUser'
 
 export function updateUserInfo(newUserInfo) {
   return {
@@ -9,13 +10,15 @@ export function updateUserInfo(newUserInfo) {
     }
   }
 }
-export function renameUser(newName) {
+export function renameUser(newName, userInfo) {
   return {
     type: UPDATE_USER,
-    payload: {
-      userInfo: {
-        name: newName
-      }
-    }
+    payload: { newName, userInfo }
+  }
+}
+export function addChat(message, userInfo) {
+  return {
+    type: ADD_CHAT,
+    payload: { message, userInfo }
   }
 }
