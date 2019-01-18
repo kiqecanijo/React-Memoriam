@@ -1,41 +1,69 @@
-import React from 'react'
-import ReactCardFlip from 'react-card-flip'
+import React, { useState } from 'react'
+import { connect } from 'react-redux'
+import { Spring } from 'react-spring'
+import { useSpring, animated } from 'react-spring/hooks'
 
-const divStyle = {
-  width: '200px',
-  textAlign: 'center',
-  display: 'inline-block',
-  height: '196px',
-  paddin: '2px'
-}
+const Card = ({ handleClick, id, el, userInfo }) => {
+  const { transform, opacity } = useSpring({
+    opacity: el.flipped || el.solved ? 1 : 0,
+    transform: `perspective(600px) rotateX(${el.flipped ? 180 : 0}deg) rotateY(${el.flipped ? 180 : 0}deg)`,
+    config: { mass: 5, tension: 400, friction: 60 }
+  })
 
-const imgStyle = {
-  width: '99%',
-  heigth: '99%'
-}
+  const cardSize = window.innerWidth * 0.8 * 0.25
 
-const Card = props => {
+  const cardStyle = {
+    position: 'absolute',
+    width: cardSize,
+    height: cardSize,
+    cursor: 'pointer',
+    willChange: 'transform, opacity',
+    backgroundSize: 'cover'
+  }
+
+  const front = {
+    ...cardStyle,
+    backgroundImage: `url(${el.path})`
+  }
+
+  const back = {
+    ...cardStyle,
+    backgroundImage: `url('./static/gray.jpg')`
+  }
+
   return (
-    <div
-      onClick={el => props.active && !props.card.revealed && !props.card.solved && props.handleClick(props.card)}
-      style={divStyle}>
-      <ReactCardFlip
-        onClick={el => props.active && !props.card.revealed && !props.card.solved && props.handleClick(props.card)}
-        style={divStyle}
-        isFlipped={props.card.solved || props.card.revealed}>
-        <div key="back" className="develop">
-          <img
-            alt="grayImage"
-            style={imgStyle}
-            src={props.card.revealed || props.card.solved ? props.card.image : '/static/gray.jpg'}
+    <Spring from={{ opacity: 0 }} to={{ opacity: 1 }} config={{ delay: id * 150 + 1000 }}>
+      {props => (
+        <div
+          style={{
+            opacity: props.opacity,
+            height: cardSize,
+            width: cardSize
+          }}
+          className={'card'}
+          onClick={handleClick}>
+          <animated.div
+            style={{
+              ...back,
+              opacity: opacity.interpolate(o => 1 - o),
+              transform
+            }}
+          />
+          <animated.div
+            style={{
+              ...front,
+              opacity,
+              transform: transform.interpolate(t => `${t} rotateX(180deg)`)
+            }}
           />
         </div>
-
-        <div key="front" className="develop">
-          <img alt="card" style={imgStyle} src={'./static/gray.jpg'} />
-        </div>
-      </ReactCardFlip>
-    </div>
+      )}
+    </Spring>
   )
 }
-export default Card
+
+const mapStateToProps = ({ userInfo, cards }) => {
+  return { userInfo, cards }
+}
+
+export default connect(mapStateToProps)(Card)
