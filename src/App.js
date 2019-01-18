@@ -34,11 +34,11 @@ const Header = () => (
         <b>About</b>
       </Link>
     </li>
-    <li>
+    {/*<li>
       <Link to="/topics">
         <b>Topics</b>
       </Link>
-    </li>
+    </li>*/}
   </ul>
 )
 

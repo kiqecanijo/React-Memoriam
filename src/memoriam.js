@@ -50,6 +50,7 @@ class Memoriam extends Component {
   }
   handleCardClick = index => {
     this.props.onUpdateCards(this.props.cards.filter(el => el), index)
+    this.props.cards.filter(el => el.solved).length >= 14 && alert('you win')
   }
 
   handleNewChat = (event = null) => {
