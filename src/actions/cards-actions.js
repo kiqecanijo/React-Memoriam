@@ -3,11 +3,18 @@ export const REORDER_CARDS = 'cards:reorderCards'
 export const FLIP_CARDS = 'cards:flipCards'
 export const HIDE_CARDS = 'cards:hideCards'
 export const SHOW_CARDS = 'cards:showCards'
+export const SET_CARDS = 'cards:setCards'
 
 export function updateCards(cards, index) {
   return {
     type: UPDATE_CARDS,
     payload: { cards, index }
+  }
+}
+export function setCards(cards) {
+  return {
+    type: SET_CARDS,
+    payload: { cards }
   }
 }
 

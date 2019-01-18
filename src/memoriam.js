@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { renameUser } from './actions/user-actions'
 import { Link } from 'react-router-dom'
-import { reorderCards, updateCards, flipCards, hideCards, showCards } from './actions/cards-actions'
+import { reorderCards, updateCards, flipCards, hideCards, showCards, setCards } from './actions/cards-actions'
 import { addChat } from './actions/user-actions'
 import { Spring } from 'react-spring'
 
@@ -64,6 +64,9 @@ class Memoriam extends Component {
       this.setState({ ...this.state, randomChat: true })
       this.props.onAddChat(message, this.props.userInfo)
     })
+    socket.on('update cards', cards => {
+      this.props.onSetCards(cards)
+    })
   }
   componentDidMount = () => {}
 
@@ -119,10 +122,11 @@ class Memoriam extends Component {
                 cursor: 'overlay',
                 lineHeight: '0px',
                 fontSize: '20px',
-                minWidth: '300px'
+                minWidth: '300px',
+                zIndex: 2
               }}
               onClick={el => this.setState({ ...this.state, randomChat: !this.state.randomChat })}>
-              <b>Random chat</b>
+              <b>Chat</b>
             </button>
           )}
         </Spring>
@@ -209,7 +213,8 @@ const mapDispatchToProps = {
   onFlipCards: flipCards,
   onHideCards: hideCards,
   onShowCards: showCards,
-  onAddChat: addChat
+  onAddChat: addChat,
+  onSetCards: setCards
 }
 
 const mapStateToProps = ({ userInfo, cards }) => {

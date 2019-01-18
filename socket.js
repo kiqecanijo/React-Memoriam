@@ -3,6 +3,10 @@ var http = require('http').Server(app)
 var io = require('socket.io')(http)
 
 io.on('connection', function(socket) {
+  socket.on('update cards', function(cards) {
+    io.emit('update cards', cards)
+  })
+
   socket.on('chat message', function({ message, name }) {
     let when = new Date()
     when = `${when.getHours()}:${when.getMinutes()}`
