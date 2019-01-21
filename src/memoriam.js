@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { renameUser } from './actions/user-actions'
-import { Link } from 'react-router-dom'
 import { reorderCards, updateCards, flipCards, hideCards, showCards, setCards } from './actions/cards-actions'
 import { addChat } from './actions/user-actions'
 import { Spring } from 'react-spring'
@@ -21,12 +20,6 @@ const buttonStyles = {
   borderRadius: '4px',
   fontSize: '15px',
   margin: '2px'
-}
-
-const column = {
-  display: 'inline-block',
-  width: '45%',
-  position: 'relative'
 }
 
 class Memoriam extends Component {

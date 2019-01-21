@@ -1,9 +1,9 @@
 import React from 'react'
-//import FacebookLogin from 'react-facebook-login'
-
 import Memoriam from './memoriam'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import About from './about'
+import Cv from './cv'
+import { Spring } from 'react-spring'
 
 const Topic = ({ match }) => <h3>Requested Param: {match.params.id}</h3>
 const Topics = ({ match }) => (
@@ -23,23 +23,35 @@ const Topics = ({ match }) => (
 )
 
 const Header = () => (
-  <ul>
-    <li>
-      <Link to="/memory">
-        <b>Memory Game</b>
-      </Link>
-    </li>
-    <li>
-      <Link to="/about">
-        <b>About</b>
-      </Link>
-    </li>
-    {/*<li>
+  <Spring from={{ opacity: 0 }} to={{ opacity: 1 }}>
+    {spring => (
+      <div style={{ opacity: spring.opacity }}>
+        <ul>
+          <li>
+            <Link to="/memory">
+              <b>Memory Game</b>
+            </Link>
+          </li>
+          <li>
+            <Link to="/cv">
+              <b>CV</b>
+            </Link>
+          </li>
+          <li>
+            <Link to="/about">
+              <b>About</b>
+            </Link>
+          </li>
+
+          {/*<li>
       <Link to="/topics">
         <b>Topics</b>
       </Link>
     </li>*/}
-  </ul>
+        </ul>
+      </div>
+    )}
+  </Spring>
 )
 
 const AppRouter = () => (
@@ -48,6 +60,7 @@ const AppRouter = () => (
       <Header />
       <Route exact path="/memory" component={Memoriam} />
       <Route path="/about" component={About} />
+      <Route exact path="/cv" component={Cv} />
       <Route path="/topics" component={Topics} />
     </div>
   </Router>

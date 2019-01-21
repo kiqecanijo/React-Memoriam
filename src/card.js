@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { Spring } from 'react-spring'
 import { useSpring, animated } from 'react-spring/hooks'
