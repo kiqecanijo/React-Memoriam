@@ -1,6 +1,6 @@
 ## React Memoriam
 
-![enter image description here](https://picasaweb.google.com/108021403123595521303/6649827383905877009#6649827380286976338 'react-memoriam')
+![Screenshot](public/static/screenshot.png)
 
 react memoriam game, playable at same time for all current online players, also have a chat menú
 
