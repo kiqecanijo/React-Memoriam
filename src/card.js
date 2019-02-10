@@ -10,7 +10,7 @@ const Card = ({ handleClick, id, el, userInfo }) => {
     config: { mass: 5, tension: 400, friction: 60 }
   })
 
-  const cardSize = window.innerWidth * 0.8 * 0.25
+  const cardSize = window.innerWidth * 0.8 * 0.24
 
   const cardStyle = {
     position: 'absolute',
@@ -32,7 +32,7 @@ const Card = ({ handleClick, id, el, userInfo }) => {
   }
 
   return (
-    <Spring from={{ opacity: 0 }} to={{ opacity: 1 }} config={{ delay: id * 150 + 1000 }}>
+    <Spring from={{ opacity: 0 }} to={{ opacity: 1 }} config={{ duration: 200, delay: id * 300 + 1000, precision	: 0.01 }}>
       {props => (
         <div
           style={{
@@ -42,6 +42,7 @@ const Card = ({ handleClick, id, el, userInfo }) => {
           }}
           className={'card'}
           onClick={handleClick}>
+
           <animated.div
             style={{
               ...back,

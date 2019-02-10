@@ -25,7 +25,7 @@ const buttonStyles = {
 class Memoriam extends Component {
   constructor(props) {
     super(props)
-    this.state = { currentChat: '', randomChat: false }
+    this.state = { currentChat: '', randomChat: false , loadedFlag : false }
   }
 
   handleReoder = (event = null) => {
@@ -62,139 +62,147 @@ class Memoriam extends Component {
       this.props.onSetCards(cards)
     })
   }
-  componentDidMount = () => {}
+  componentDidMount = () => {
+    setTimeout(el => {
+      this.setState({
+        ...this.state,
+        loadedFlag : true
+      })
+    },6000)
+
+
+  }
 
   render() {
     return (
       <div>
+      <div className={'userData'}>
+      <b>{this.props.userInfo.name}</b>
+      <br />
+      <b>Solved:</b> {this.props.cards.filter(el => el.solved).length}
+      <br />
+      <b>Flipped:</b> {this.props.cards.filter(el => el.flipped).length}
+      <br />
+      </div>
+      <div style={memoriamStyles}>
+      {this.props.cards.map((el, index) => (
+        <Card el={el} handleClick={el => this.handleCardClick(index)} key={index} id={index} />
+      ))}
+      </div>
+      <br />
+      {this.props.userInfo.debug && (
         <div className={'userData'}>
-          <b>{this.props.userInfo.name}</b>
-          <br />
-          <b>Solved:</b> {this.props.cards.filter(el => el.solved).length}
-          <br />
-          <b>Flipped:</b> {this.props.cards.filter(el => el.flipped).length}
-          <br />
+        <button style={{ ...buttonStyles, backgroundColor: 'green' }} onClick={this.handleShow.bind(this)}>
+        Show all
+        </button>
+        <button style={{ ...buttonStyles, backgroundColor: 'orange' }} onClick={this.handleFlip.bind(this)}>
+        Switch flip
+        </button>
+        <button style={{ ...buttonStyles, backgroundColor: 'red' }} onClick={this.handleHide.bind(this)}>
+        Hide all
+        </button>
+        <button style={{ ...buttonStyles, backgroundColor: 'gray' }} onClick={this.handleReoder.bind(this)}>
+        Reorder
+        </button>
         </div>
-        <div style={memoriamStyles}>
-          {this.props.cards.map((el, index) => (
-            <Card el={el} handleClick={el => this.handleCardClick(index)} key={index} id={index} />
-          ))}
-        </div>
-        <br />
-        {this.props.userInfo.debug && (
-          <div className={'userData'}>
-            <button style={{ ...buttonStyles, backgroundColor: 'green' }} onClick={this.handleShow.bind(this)}>
-              Show all
-            </button>
-            <button style={{ ...buttonStyles, backgroundColor: 'orange' }} onClick={this.handleFlip.bind(this)}>
-              Switch flip
-            </button>
-            <button style={{ ...buttonStyles, backgroundColor: 'red' }} onClick={this.handleHide.bind(this)}>
-              Hide all
-            </button>
-            <button style={{ ...buttonStyles, backgroundColor: 'gray' }} onClick={this.handleReoder.bind(this)}>
-              Reorder
-            </button>
-          </div>
-        )}
-        <Spring from={{ opacity: 0 }} to={{ opacity: 1 }} config={{ delay: 3500 }}>
-          {props => (
-            <button
-              style={{
-                opacity: props.opacity,
-                position: 'fixed',
-                bottom: '0px',
-                margin: '0px',
-                right: '0px',
-                lineHeigth: '0px',
-                backgroundColor: 'red',
-                color: 'white',
-                height: '0px',
-                textAlign: 'center',
-                padding: '20px',
-                borderRadius: '5px 5px 0px 0px',
-                cursor: 'overlay',
-                lineHeight: '0px',
-                fontSize: '20px',
-                minWidth: '300px',
-                zIndex: 2
-              }}
-              onClick={el => this.setState({ ...this.state, randomChat: !this.state.randomChat })}>
-              <b>Chat</b>
-            </button>
-          )}
-        </Spring>
+      )}
 
-        <Spring
-          from={{ height: this.state.randomChat ? 0 : 400, opacity: this.state.randomChat ? 0 : 1 }}
-          to={{ height: this.state.randomChat ? 400 : 0, opacity: this.state.randomChat ? 1 : 0 }}
-          config={{ delay: 50 }}>
-          {props => (
-            <div
-              id=""
-              style={{
-                opacity: props.opacity || 0,
-                height: props.height,
-                position: 'fixed',
-                bottom: '42px',
-                right: '0px',
-                width: '260px',
-                borderRadius: '10px',
-                backgroundColor: 'white',
-                padding: '20px',
-                boxShadow: '-2px -2px 2px grey'
-              }}>
-              <p>
-                <b>Alias :</b>
-              </p>
-              <input
-                style={{
-                  height: '35px',
-                  fontSize: '16px',
-                  color: 'red',
-                  border: '1px solid red',
-                  padding: '0px 13px',
-                  width: '110px'
-                }}
-                value={this.props.userInfo.name}
-                id="name"
-                autocomplete="off"
-                maxLength={11}
-                onChange={el => this.props.onRenameUser(el.target.value, this.props.userInfo)}
-              />
-              <div style={{ overflowY: 'scroll', height: '270px' }}>
-                {this.props.userInfo.chat.slice(Math.max(this.props.userInfo.chat.length - 6, 0)).map(chat => (
-                  <p style={{ color: 'orange' }}>
-                    <b>{chat}</b>
-                  </p>
-                ))}
-              </div>
-              <div>
-                <input
-                  style={{
-                    height: '35px',
-                    fontSize: '16px',
-                    color: 'red',
-                    border: '1px solid red',
-                    padding: '0px 13px',
-                    width: '110px'
-                  }}
-                  value={this.state.currentChat}
-                  maxLength={25}
-                  autocomplete="off"
-                  onChange={el => this.setState({ ...this.state, currentChat: el.target.value })}
-                />
+       {this.state.loadedFlag && <div className="chatSection"> <button
+       style={{
+         position: 'fixed',
+         bottom: '0px',
+         margin: '0px',
+         right: '0px',
+         lineHeigth: '0px',
+         backgroundColor: 'red',
+         color: 'white',
+         height: '0px',
+         textAlign: 'center',
+         padding: '20px',
+         borderRadius: '5px 5px 0px 0px',
+         cursor: 'overlay',
+         lineHeight: '0px',
+         fontSize: '20px',
+         minWidth: '300px',
+         zIndex: 2
+       }}
+       onClick={el => this.setState({ ...this.state, randomChat: !this.state.randomChat })}>
+       <b>Chat</b>
+       </button>
 
-                <button
-                  disabled={this.state.currentChat.length ? false : true}
-                  style={{ ...buttonStyles, backgroundColor: 'orange', padding: '11px' }}
-                  onClick={this.handleNewChat}>
-                  <b>Send chat</b>
-                </button>
-              </div>
-            </div>
-          )}
-        </Spring>
+
+
+       <Spring
+       from={{ height: this.state.randomChat ? 0 : 400, opacity: this.state.randomChat ? 0 : 1 }}
+       to={{ height: this.state.randomChat ? 400 : 0, opacity: this.state.randomChat ? 1 : 0 }}
+       config={{ delay: 50,precision	: 0.05 }}>
+       {props => (
+         <div
+         id=""
+         style={{
+           opacity: props.opacity || 0,
+           height: props.height,
+           position: 'fixed',
+           bottom: '42px',
+           right: '0px',
+           width: '260px',
+           borderRadius: '10px',
+           backgroundColor: 'white',
+           padding: '20px',
+           boxShadow: '-2px -2px 2px grey'
+         }}>
+         <p>
+         <b>Alias :</b>
+         </p>
+         <input
+         style={{
+           height: '35px',
+           fontSize: '16px',
+           color: 'red',
+           border: '1px solid red',
+           padding: '0px 13px',
+           width: '110px'
+         }}
+         value={this.props.userInfo.name}
+         id="name"
+         autocomplete="off"
+         maxLength={11}
+         onChange={el => this.props.onRenameUser(el.target.value, this.props.userInfo)}
+         />
+         <div style={{ overflowY: 'scroll', height: '270px' }}>
+         {this.props.userInfo.chat.slice(Math.max(this.props.userInfo.chat.length - 6, 0)).map(chat => (
+           <p style={{ color: 'orange' }}>
+           <b>{chat}</b>
+           </p>
+         ))}
+         </div>
+         <div>
+         <input
+         style={{
+           height: '35px',
+           fontSize: '16px',
+           color: 'red',
+           border: '1px solid red',
+           padding: '0px 13px',
+           width: '110px'
+         }}
+         value={this.state.currentChat}
+         maxLength={25}
+         autocomplete="off"
+         onChange={el => this.setState({ ...this.state, currentChat: el.target.value })}
+         />
+
+         <button
+         disabled={this.state.currentChat.length ? false : true}
+         style={{ ...buttonStyles, backgroundColor: 'orange', padding: '11px' }}
+         onClick={this.handleNewChat}>
+         <b>Send chat</b>
+         </button>
+         </div>
+         </div>
+       )}
+       </Spring> </div>  }
+
       </div>
     )
   }

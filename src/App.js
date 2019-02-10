@@ -23,20 +23,19 @@ const Topics = ({ match }) => (
 )
 
 const Header = () => (
-  <Spring from={{ opacity: 0 }} to={{ opacity: 1 }}>
-    {spring => (
-      <div style={{ opacity: spring.opacity }}>
+
+      <div >
         <ul>
           <li>
             <Link to="/memory">
               <b>Memory Game</b>
             </Link>
           </li>
-          <li>
+          {/*<li>
             <Link to="/cv">
               <b>CV</b>
             </Link>
-          </li>
+          </li>*/}
           <li>
             <Link to="/about">
               <b>About</b>
@@ -50,8 +49,7 @@ const Header = () => (
     </li>*/}
         </ul>
       </div>
-    )}
-  </Spring>
+
 )
 
 const AppRouter = () => (
