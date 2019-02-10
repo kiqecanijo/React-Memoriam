@@ -13,7 +13,7 @@ const cards = (state = '', { type, payload }) => {
       const solved =
         updated.filter(el => el.flipped).length >= 2 &&
         !updated.filter(el => el.flipped).reduce((acc, current) => {
-          const result = acc != current.path ? current.path : false
+          const result = acc !== current.path ? current.path : false
           return result
         }, false)
           ? true
